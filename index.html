@@ -115,13 +115,22 @@
             content: ''; position: absolute; bottom: 0; left: 50%; transform: translateX(-50%);
             width: 40px; height: 2px; background: var(--gold); transition: background 0.3s ease;
         }
+        .section-icon { font-size: 1.6rem; display: block; margin-bottom: 8px; opacity: 0.7; }
 
         /* Hero */
         .hero {
             min-height: 90vh; display: flex; align-items: center; justify-content: center; text-align: center;
             background: var(--hero-gradient);
             padding: 120px 24px 80px; transition: background 0.4s ease;
+            position: relative; overflow: hidden;
         }
+        .hero-bg {
+            position: absolute; inset: 0; z-index: 0;
+            background: url('images/sunset-sail.jpg') center/cover no-repeat;
+            opacity: 0.15; filter: blur(2px);
+        }
+        [data-theme="dark"] .hero-bg { opacity: 0.08; }
+        .hero .container { position: relative; z-index: 1; }
         .hero h1 { font-size: clamp(2.5rem, 5vw, 4.5rem); margin-bottom: 24px; color: var(--accent); transition: color 0.3s ease; }
         .hero p { font-size: 1.15rem; max-width: 600px; margin: 0 auto; color: var(--text-muted); font-weight: 300; line-height: 1.8; transition: color 0.3s ease; }
 
@@ -280,6 +289,7 @@
     </nav>
 
     <section id="hem" class="hero">
+        <div class="hero-bg"></div>
         <div class="container fade-in">
             <h1 data-i18n="hero_title">Privat seglingsanteckning</h1>
             <p data-i18n="hero_text">Privat information utan koppling till n&#229;gon verksamhet eller erbjudande.</p>
@@ -288,7 +298,7 @@
 
     <section id="om">
         <div class="container fade-in">
-            <h2 class="section-title" data-i18n="about_title">Bakgrund</h2>
+            <h2 class="section-title"><span class="section-icon">&#128693;</span><span data-i18n="about_title">Bakgrund</span></h2>
             <div class="content-block">
                 <p data-i18n="about_text"></p>
             </div>
@@ -297,7 +307,7 @@
 
     <section style="background: var(--alt-bg);">
         <div class="container fade-in">
-            <h2 class="section-title" data-i18n="context_title">Privat och personligt</h2>
+            <h2 class="section-title"><span class="section-icon">&#9875;</span><span data-i18n="context_title">Privat och personligt</span></h2>
             <div class="content-block">
                 <p data-i18n="context_text"></p>
             </div>
@@ -306,7 +316,7 @@
 
     <section id="bilder">
         <div class="container fade-in">
-            <h2 class="section-title" data-i18n="gallery_title">Bilder (privata tillf&#228;llen)</h2>
+            <h2 class="section-title"><span class="section-icon">&#128247;</span><span data-i18n="gallery_title">Bilder (privata tillf&#228;llen)</span></h2>
             <div class="gallery" id="gallery"></div>
             <p style="text-align:center; font-size:0.85rem; margin-top:24px; color: var(--text-muted);" data-i18n="gallery_disclaimer"></p>
         </div>
@@ -314,7 +324,7 @@
 
     <section id="muusik">
         <div class="container fade-in">
-            <h2 class="section-title" data-i18n="music_title">Muusik & ljud</h2>
+            <h2 class="section-title"><span class="section-icon">&#127925;</span><span data-i18n="music_title">Muusik & ljud</span></h2>
             <div class="track-list" id="trackList"></div>
             <p style="text-align:center; font-size:0.85rem; margin-top:24px; color: var(--text-muted);" data-i18n="music_disclaimer"></p>
         </div>
@@ -322,7 +332,7 @@
 
     <section id="karta" style="background: var(--alt-bg);">
         <div class="container fade-in">
-            <h2 class="section-title" data-i18n="map_title">&#128506; Ungef&#228;rlig plats</h2>
+            <h2 class="section-title"><span class="section-icon">&#127758;</span><span data-i18n="map_title">Ungef&#228;rlig plats</span></h2>
             <div class="map-wrapper">
                 <div class="map-container">
                     <iframe src="https://www.openstreetmap.org/export/embed.html?bbox=17.85%2C59.25%2C18.10%2C59.43&layer=mapnik" loading="lazy" referrerpolicy="no-referrer"></iframe>
@@ -336,7 +346,7 @@
     <!-- Instagram section -->
     <section id="instagram" style="background: var(--alt-bg);">
         <div class="container fade-in">
-            <h2 class="section-title" data-i18n="insta_title">Instagram</h2>
+            <h2 class="section-title"><span class="section-icon">&#9993;</span><span data-i18n="insta_title">Instagram</span></h2>
             <div class="social-card">
                 <span class="social-icon">&#9993;</span>
                 <h3>@privatsegling</h3>
@@ -349,12 +359,6 @@
         </div>
     </section>
 
-    <div class="container fade-in">
-        <div class="legal-note">
-            <p data-i18n="legal_text"></p>
-        </div>
-    </div>
-
     <footer>
         <div class="container">
             <div style="font-family: var(--font-heading); font-size: 1.5rem; margin-bottom: 12px;">&#9993; Privat segling</div>
@@ -365,8 +369,13 @@
                     @privatsegling
                 </a>
             </p>
-            <p><img src="qr.png" alt="Instagram QR" style="width:100px;height:100px;border-radius:8px;opacity:0.8;transition:opacity 0.3s;" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=0.8"></p>
             <p class="footer-note" data-i18n="footer_note"></p>
+
+            <!-- Legal spoiler -->
+            <details style="margin-top: 24px; text-align: left; max-width: 700px; margin-left: auto; margin-right: auto;">
+                <summary style="cursor: pointer; color: var(--gold); font-size: 0.8rem; padding: 8px 0;" data-i18n="legal_summary"></summary>
+                <p style="font-size: 0.75rem; line-height: 1.6; margin-top: 8px; color: var(--footer-text);" data-i18n="legal_text"></p>
+            </details>
         </div>
     </footer>
 
@@ -384,68 +393,71 @@
             sv: {
                 logo: "\u26f5 Privat segling",
                 nav_home: "Hem", nav_about: "Bakgrund", nav_photos: "Bilder", nav_music: "Muusik", nav_map: "Karta", nav_instagram: "Instagram",
-                hero_title: "Privat seglingsanteckning",
-                hero_text: "Privat information utan koppling till n\u00e5gon verksamhet eller erbjudande.",
+                hero_title: "Vind, vatten & gemenskap",
+                hero_text: "N\u00e5gra v\u00e4nner, en k\u00e4rlek till segling och Stockholms sk\u00e4rg\u00e5rd. Vi g\u00e5r ut p\u00e5 vattnet n\u00e4r vi kan \u2013 utan schema, utan f\u00f6rpliktelser.",
                 about_title: "Bakgrund",
-                about_text: "Ett f\u00e5tal personer med gemensamt intresse f\u00f6r segling har vid enstaka tillf\u00e4llen varit ute p\u00e5 vattnet tillsammans. Det handlar inte om n\u00e5gon verksamhet, tj\u00e4nst eller organiserad aktivitet. Allt sker i strikt privat sammanhang.",
+                about_text: "Vi \u00e4r ett f\u00e5tal personer som delar en k\u00e4rlek till segling. Ibland samlas vi spontant, tittar p\u00e5 v\u00e4derprognosen och g\u00e5r ut p\u00e5 vattnet f\u00f6r n\u00e5gra timmar. Vi uppskattar tystnaden, vinden i seglen och bra s\u00e4llskap. Ibland tar vi med oss en gitarr.",
                 context_title: "Privat och personligt",
-                context_text: "Alla kontakter sker p\u00e5 individuell basis. Det finns ingen organisation, inget utbud och inga \u00e5terkommande tillf\u00e4llen. Informationen p\u00e5 denna sida \u00e4r endast avsedd f\u00f6r personlig orientering och utg\u00f6r inte ett erbjudande till allm\u00e4nheten. Publicerade bilder saknar tidsm\u00e4ssig koppling och speglar enbart enskilda privata tillf\u00e4llen.",
+                context_text: "Vi m\u00f6ts p\u00e5 individuell basis \u2013 det finns ingen organisation, inget schema och inga \u00e5terkommande evenemang. Denna sida \u00e4r skapad f\u00f6r personlig orientering och \u00e4r inte ett erbjudande till allm\u00e4nheten. Bilderna p\u00e5 sidan har ingen tidsm\u00e4ssig ordning och visar enbart enskilda privata tillf\u00e4llen.",
                 gallery_title: "Bilder (privata tillf\u00e4llen)",
                 gallery_disclaimer: "Bilder utan tidsm\u00e4ssig ordning och utan koppling till \u00e5terkommande tillf\u00e4llen.",
                 music_title: "Muusik & ljud",
                 music_disclaimer: "Privata inspelningar och favoritl\u00e5tar. Endast f\u00f6r personlig lyssning.",
-                map_title: "\ud83d\udccd Ungef\u00e4rlig plats", map_location: "Stockholmsomr\u00e5det",
+                map_title: "Ungef\u00e4rlig plats", map_location: "Stockholmsomr\u00e5det",
                 map_disclaimer: "Platsuppgift endast ungef\u00e4rlig och av informativ karakt\u00e4r.",
                 contact_label: "Endast privat och informativ anv\u00e4ndning. Ingen kontaktinformation publiceras.",
                 legal_text: "Denna sida \u00e4r en privat anteckning och representerar inte n\u00e5gon verksamhet, tj\u00e4nst eller organisation. Ingen form av erbjudande riktas till allm\u00e4nheten. Ingen organiserad aktivitet förekommer. Inga transporttj\u00e4nster tillhandah\u00e5lls. All eventuell n\u00e4rvaro p\u00e5 vatten sker uteslutande i privat sammanhang mellan enskilda personer utan n\u00e5gon form av arrang\u00f6r eller ansvarig part. Ingen marknadsf\u00f6ring eller rekrytering sker via denna sida. Ingen ers\u00e4ttning eller ekonomisk \u00f6verenskommelse regleras via denna sida.",
                 footer_note: "Denna webbplats utg\u00f6r inte ett erbjudande, en tj\u00e4nst eller en organiserad aktivitet. Endast privat och informativ anv\u00e4ndning.",
                 insta_title: "F\u00f6lj oss p\u00e5 Instagram",
-                insta_text: "Vi delar bilder och uppdateringar fr\u00e5n v\u00e5ra privata seglingstillf\u00e4llen. Hitta oss p\u00e5 @privatsegling.",
-                insta_button: "\u00d6ppna Instagram"
+                insta_text: "H\u00e4r delar vi bilder och stunder fr\u00e5n v\u00e5ra turer p\u00e5 vattnet. F\u00f6lj oss f\u00f6r att se hur det ser ut n\u00e4r vinden \u00e4r med oss.",
+                insta_button: "\u00d6ppna Instagram",
+                legal_summary: "Juridisk information (klicka f\u00f6r att visa)"
             },
             en: {
                 logo: "\u26f5 Private sailing",
                 nav_home: "Home", nav_about: "Background", nav_photos: "Photos", nav_music: "Music", nav_map: "Map", nav_instagram: "Instagram",
-                hero_title: "Private sailing notes",
-                hero_text: "Private information with no connection to any activity or offer.",
+                hero_title: "Wind, water & community",
+                hero_text: "A few friends, a love for sailing and the Stockholm archipelago. We head out on the water when we can \u2013 no schedule, no obligations.",
                 about_title: "Background",
-                about_text: "A few individuals with a shared interest in sailing have occasionally been out on the water together. This does not involve any activity, service, or organised event. Everything takes place in a strictly private context.",
+                about_text: "We're a small group united by a love for sailing. Sometimes we gather spontaneously, check the weather forecast and head out on the water for a few hours. We appreciate the silence, the wind in the sails, and good company. Sometimes we bring along a guitar.",
                 context_title: "Private and personal",
-                context_text: "All contacts are made on an individual basis. There is no organisation, no offering, and no recurring occasions. The information on this site is for personal reference only and does not constitute an offer to the general public. Published images have no chronological connection and reflect only individual private occasions.",
+                context_text: "We meet on an individual basis \u2013 there's no organisation, no schedule, and no recurring events. This site is created for personal reference and is not an offer to the general public. The images have no chronological order and show only individual private occasions.",
                 gallery_title: "Images (private occasions)",
                 gallery_disclaimer: "Images in no chronological order and without connection to recurring occasions.",
                 music_title: "Music & sounds",
                 music_disclaimer: "Private recordings and favorite tracks. For personal listening only.",
-                map_title: "\ud83d\udccd Approximate location", map_location: "Stockholm area",
+                map_title: "Approximate location", map_location: "Stockholm area",
                 map_disclaimer: "Location information is approximate and for informative purposes only.",
                 contact_label: "Private and informative use only. No contact information published.",
                 legal_text: "This page is a private note and does not represent any activity, service, or organisation. No form of offer is directed to the public. No organised activity takes place. No transport services are provided. Any possible presence on the water occurs strictly in a private context between individuals, without any organiser or responsible party. No marketing or recruitment takes place via this site. No compensation or financial arrangement is regulated through this site.",
                 footer_note: "This website does not constitute an offer, a service, or an organised activity. Private and informative use only.",
                 insta_title: "Follow on Instagram",
-                insta_text: "We share photos and updates from our private sailing occasions. Find us at @privatsegling.",
-                insta_button: "Open Instagram"
+                insta_text: "Here we share photos and moments from our trips on the water. Follow along to see what it looks like when the wind is with us."
+                insta_button: "Open Instagram",
+                legal_summary: "Legal information (click to expand)"
             },
             ru: {
                 logo: "\u26f5 \u0427\u0430\u0441\u0442\u043d\u043e\u0435 \u043f\u043b\u0430\u0432\u0430\u043d\u0438\u0435",
                 nav_home: "\u0413\u043b\u0430\u0432\u043d\u0430\u044f", nav_about: "\u041f\u0440\u0435\u0434\u0438\u0441\u0442\u043e\u0440\u0438\u044f", nav_photos: "\u0424\u043e\u0442\u043e", nav_music: "\u041c\u0443\u0437\u044b\u043a\u0430", nav_map: "\u041a\u0430\u0440\u0442\u0430", nav_instagram: "Instagram",
-                hero_title: "\u0427\u0430\u0441\u0442\u043d\u044b\u0435 \u0437\u0430\u043f\u0438\u0441\u0438 \u043e \u043f\u0430\u0440\u0443\u0441\u043d\u043e\u043c \u0441\u043f\u043e\u0440\u0442\u0435",
-                hero_text: "\u0427\u0430\u0441\u0442\u043d\u0430\u044f \u0438\u043d\u0444\u043e\u0440\u043c\u0430\u0446\u0438\u044f, \u043d\u0435 \u0441\u0432\u044f\u0437\u0430\u043d\u043d\u0430\u044f \u0441 \u043a\u0430\u043a\u043e\u0439-\u043b\u0438\u0431\u043e \u0434\u0435\u044f\u0442\u0435\u043b\u044c\u043d\u043e\u0441\u0442\u044c\u044e \u0438\u043b\u0438 \u043f\u0440\u0435\u0434\u043b\u043e\u0436\u0435\u043d\u0438\u0435\u043c.",
+                hero_title: "\u0412\u0435\u0442\u0435\u0440, \u0432\u043e\u0434\u0430 \u0438 \u043a\u043e\u043c\u043f\u0430\u043d\u0438\u044f",
+                hero_text: "\u041d\u0435\u0441\u043a\u043e\u043b\u044c\u043a\u043e \u0434\u0440\u0443\u0437\u0435\u0439, \u043e\u0431\u0449\u0430\u044f \u043b\u044e\u0431\u043e\u0432\u044c \u043a \u043f\u0430\u0440\u0443\u0441\u043d\u043e\u043c\u0443 \u0441\u043f\u043e\u0440\u0442\u0443 \u0438 \u0448\u0445\u0435\u0440\u0430\u043c \u0421\u0442\u043e\u043a\u0433\u043e\u043b\u044c\u043c\u0430. \u041c\u044b \u0432\u044b\u0445\u043e\u0434\u0438\u043c \u043d\u0430 \u0432\u043e\u0434\u0443, \u043a\u043e\u0433\u0434\u0430 \u043f\u043e\u043b\u0443\u0447\u0430\u0435\u0442\u0441\u044f \u2014 \u0431\u0435\u0437 \u0440\u0430\u0441\u043f\u0438\u0441\u0430\u043d\u0438\u044f, \u0431\u0435\u0437 \u043e\u0431\u044f\u0437\u0430\u043d\u043d\u043e\u0441\u0442\u0435\u0439.",
                 about_title: "\u041f\u0440\u0435\u0434\u0438\u0441\u0442\u043e\u0440\u0438\u044f",
-                about_text: "\u041d\u0435\u0441\u043a\u043e\u043b\u044c\u043a\u043e \u0447\u0435\u043b\u043e\u0432\u0435\u043a, \u043e\u0431\u044a\u0435\u0434\u0438\u043d\u0451\u043d\u043d\u044b\u0445 \u043e\u0431\u0449\u0438\u043c \u0438\u043d\u0442\u0435\u0440\u0435\u0441\u043e\u043c \u043a \u043f\u0430\u0440\u0443\u0441\u043d\u043e\u043c\u0443 \u0441\u043f\u043e\u0440\u0442\u0443, \u0438\u043d\u043e\u0433\u0434\u0430 \u0432\u043c\u0435\u0441\u0442\u0435 \u0432\u044b\u0445\u043e\u0434\u0438\u043b\u0438 \u043d\u0430 \u0432\u043e\u0434\u0443. \u0420\u0435\u0447\u044c \u043d\u0435 \u0438\u0434\u0451\u0442 \u043e \u043a\u0430\u043a\u043e\u0439-\u043b\u0438\u0431\u043e \u0434\u0435\u044f\u0442\u0435\u043b\u044c\u043d\u043e\u0441\u0442\u0438, \u0443\u0441\u043b\u0443\u0433\u0435 \u0438\u043b\u0438 \u043e\u0440\u0433\u0430\u043d\u0438\u0437\u043e\u0432\u0430\u043d\u043d\u043e\u043c \u043c\u0435\u0440\u043e\u043f\u0440\u0438\u044f\u0442\u0438\u0438. \u0412\u0441\u0451 \u043f\u0440\u043e\u0438\u0441\u0445\u043e\u0434\u0438\u0442 \u0432 \u0441\u0442\u0440\u043e\u0433\u043e \u0447\u0430\u0441\u0442\u043d\u043e\u043c \u043a\u043e\u043d\u0442\u0435\u043a\u0441\u0442\u0435.",
+                about_text: "\u041c\u044b \u2014 \u043d\u0435\u0431\u043e\u043b\u044c\u0448\u0430\u044f \u043a\u043e\u043c\u043f\u0430\u043d\u0438\u044f, \u043e\u0431\u044a\u0435\u0434\u0438\u043d\u0451\u043d\u043d\u0430\u044f \u043b\u044e\u0431\u043e\u0432\u044c\u044e \u043a \u043f\u0430\u0440\u0443\u0441\u043d\u043e\u043c\u0443 \u0441\u043f\u043e\u0440\u0442\u0443. \u0418\u043d\u043e\u0433\u0434\u0430 \u0441\u0431\u0435\u0433\u0430\u0435\u043c\u0441\u044f \u0441\u043f\u043e\u043d\u0442\u0430\u043d\u043d\u043e, \u0441\u043c\u043e\u0442\u0440\u0438\u043c \u043f\u0440\u043e\u0433\u043d\u043e\u0437 \u043f\u043e\u0433\u043e\u0434\u044b \u0438 \u0432\u044b\u0445\u043e\u0434\u0438\u043c \u043d\u0430 \u0432\u043e\u0434\u0443 \u043d\u0430 \u043d\u0435\u0441\u043a\u043e\u043b\u044c\u043a\u043e \u0447\u0430\u0441\u043e\u0432. \u0426\u0435\u043d\u0438\u043c \u0442\u0438\u0448\u0438\u043d\u0443, \u0432\u0435\u0442\u0435\u0440 \u0432 \u043f\u0430\u0440\u0443\u0441\u0430\u0445 \u0438 \u0445\u043e\u0440\u043e\u0448\u0443\u044e \u043a\u043e\u043c\u043f\u0430\u043d\u0438\u044e. \u0418\u043d\u043e\u0433\u0434\u0430 \u0431\u0435\u0440\u0451\u043c \u0441 \u0441\u043e\u0431\u043e\u0439 \u0433\u0438\u0442\u0430\u0440\u0443.",
                 context_title: "\u0427\u0430\u0441\u0442\u043d\u043e \u0438 \u043b\u0438\u0447\u043d\u043e",
-                context_text: "\u0412\u0441\u0435 \u043a\u043e\u043d\u0442\u0430\u043a\u0442\u044b \u043e\u0441\u0443\u0449\u0435\u0441\u0442\u0432\u043b\u044f\u044e\u0442\u0441\u044f \u043d\u0430 \u0438\u043d\u0434\u0438\u0432\u0438\u0434\u0443\u0430\u043b\u044c\u043d\u043e\u0439 \u043e\u0441\u043d\u043e\u0432\u0435. \u041d\u0435\u0442 \u043e\u0440\u0433\u0430\u043d\u0438\u0437\u0430\u0446\u0438\u0438, \u043d\u0435\u0442 \u043f\u0440\u0435\u0434\u043b\u043e\u0436\u0435\u043d\u0438\u0439 \u0443\u0441\u043b\u0443\u0433 \u0438 \u043d\u0435\u0442 \u0440\u0435\u0433\u0443\u043b\u044f\u0440\u043d\u044b\u0445 \u043c\u0435\u0440\u043e\u043f\u0440\u0438\u044f\u0442\u0438\u0439. \u0418\u043d\u0444\u043e\u0440\u043c\u0430\u0446\u0438\u044f \u043d\u0430 \u044d\u0442\u043e\u043c \u0441\u0430\u0439\u0442\u0435 \u043f\u0440\u0435\u0434\u043d\u0430\u0437\u043d\u0430\u0447\u0435\u043d\u0430 \u0442\u043e\u043b\u044c\u043a\u043e \u0434\u043b\u044f \u043b\u0438\u0447\u043d\u043e\u0433\u043e \u043e\u0437\u043d\u0430\u043a\u043e\u043c\u043b\u0435\u043d\u0438\u044f \u0438 \u043d\u0435 \u044f\u0432\u043b\u044f\u0435\u0442\u0441\u044f \u043f\u0440\u0435\u0434\u043b\u043e\u0436\u0435\u043d\u0438\u0435\u043c \u0434\u043b\u044f \u0448\u0438\u0440\u043e\u043a\u043e\u0439 \u043f\u0443\u0431\u043b\u0438\u043a\u0438. \u041e\u043f\u0443\u0431\u043b\u0438\u043a\u043e\u0432\u0430\u043d\u043d\u044b\u0435 \u0438\u0437\u043e\u0431\u0440\u0430\u0436\u0435\u043d\u0438\u044f \u043d\u0435 \u0438\u043c\u0435\u044e\u0442 \u0432\u0440\u0435\u043c\u0435\u043d\u043d\u043e\u0439 \u043f\u0440\u0438\u0432\u044f\u0437\u043a\u0438 \u0438 \u043e\u0442\u0440\u0430\u0436\u0430\u044e\u0442 \u0442\u043e\u043b\u044c\u043a\u043e \u043e\u0442\u0434\u0435\u043b\u044c\u043d\u044b\u0435 \u0447\u0430\u0441\u0442\u043d\u044b\u0435 \u0441\u043b\u0443\u0447\u0430\u0438.",
+                context_text: "\u041c\u044b \u0432\u0441\u0442\u0440\u0435\u0447\u0430\u0435\u043c\u0441\u044f \u043d\u0430 \u0438\u043d\u0434\u0438\u0432\u0438\u0434\u0443\u0430\u043b\u044c\u043d\u043e\u0439 \u043e\u0441\u043d\u043e\u0432\u0435 \u2014 \u043d\u0435\u0442 \u043e\u0440\u0433\u0430\u043d\u0438\u0437\u0430\u0446\u0438\u0438, \u043d\u0435\u0442 \u0440\u0430\u0441\u043f\u0438\u0441\u0430\u043d\u0438\u044f, \u043d\u0435\u0442 \u0440\u0435\u0433\u0443\u043b\u044f\u0440\u043d\u044b\u0445 \u043c\u0435\u0440\u043e\u043f\u0440\u0438\u044f\u0442\u0438\u0439. \u042d\u0442\u043e\u0442 \u0441\u0430\u0439\u0442 \u0441\u043e\u0437\u0434\u0430\u043d \u0434\u043b\u044f \u043b\u0438\u0447\u043d\u043e\u0433\u043e \u043e\u0437\u043d\u0430\u043a\u043e\u043c\u043b\u0435\u043d\u0438\u044f \u0438 \u043d\u0435 \u044f\u0432\u043b\u044f\u0435\u0442\u0441\u044f \u043f\u0440\u0435\u0434\u043b\u043e\u0436\u0435\u043d\u0438\u0435\u043c \u0434\u043b\u044f \u0448\u0438\u0440\u043e\u043a\u043e\u0439 \u043f\u0443\u0431\u043b\u0438\u043a\u0438. \u0424\u043e\u0442\u043e\u0433\u0440\u0430\u0444\u0438\u0438 \u043f\u0443\u0431\u043b\u0438\u043a\u0443\u044e\u0442\u0441\u044f \u0432 \u0441\u043b\u0443\u0447\u0430\u0439\u043d\u043e\u043c \u043f\u043e\u0440\u044f\u0434\u043a\u0435 \u0438 \u043f\u043e\u043a\u0430\u0437\u044b\u0432\u0430\u044e\u0442 \u043e\u0442\u0434\u0435\u043b\u044c\u043d\u044b\u0435 \u0447\u0430\u0441\u0442\u043d\u044b\u0435 \u043c\u043e\u043c\u0435\u043d\u0442\u044b.",
                 gallery_title: "\u0424\u043e\u0442\u043e\u0433\u0440\u0430\u0444\u0438\u0438 (\u0447\u0430\u0441\u0442\u043d\u044b\u0435 \u0441\u043b\u0443\u0447\u0430\u0438)",
                 gallery_disclaimer: "\u0418\u0437\u043e\u0431\u0440\u0430\u0436\u0435\u043d\u0438\u044f \u0432 \u0441\u043b\u0443\u0447\u0430\u0439\u043d\u043e\u043c \u043f\u043e\u0440\u044f\u0434\u043a\u0435, \u0431\u0435\u0437 \u0441\u0432\u044f\u0437\u0438 \u0441 \u043f\u043e\u0432\u0442\u043e\u0440\u044f\u044e\u0449\u0438\u043c\u0438\u0441\u044f \u0432\u044b\u0445\u043e\u0434\u0430\u043c\u0438.",
                 music_title: "\u041c\u0443\u0437\u044b\u043a\u0430 \u0438 \u0437\u0432\u0443\u043a\u0438",
                 music_disclaimer: "\u0427\u0430\u0441\u0442\u043d\u044b\u0435 \u0437\u0430\u043f\u0438\u0441\u0438 \u0438 \u043b\u044e\u0431\u0438\u043c\u044b\u0435 \u043f\u0435\u0441\u043d\u0438. \u0422\u043e\u043b\u044c\u043a\u043e \u0434\u043b\u044f \u043b\u0438\u0447\u043d\u043e\u0433\u043e \u043f\u0440\u043e\u0441\u043b\u0443\u0448\u0438\u0432\u0430\u043d\u0438\u044f.",
-                map_title: "\ud83d\udccd \u041f\u0440\u0438\u043c\u0435\u0440\u043d\u043e\u0435 \u0440\u0430\u0441\u043f\u043e\u043b\u043e\u0436\u0435\u043d\u0438\u0435", map_location: "\u0420\u0430\u0439\u043e\u043d \u0421\u0442\u043e\u043a\u0433\u043e\u043b\u044c\u043c\u0430",
+                map_title: "\u041f\u0440\u0438\u043c\u0435\u0440\u043d\u043e\u0435 \u0440\u0430\u0441\u043f\u043e\u043b\u043e\u0436\u0435\u043d\u0438\u0435", map_location: "\u0420\u0430\u0439\u043e\u043d \u0421\u0442\u043e\u043a\u0433\u043e\u043b\u044c\u043c\u0430",
                 map_disclaimer: "\u0418\u043d\u0444\u043e\u0440\u043c\u0430\u0446\u0438\u044f \u043e \u043c\u0435\u0441\u0442\u0435 \u044f\u0432\u043b\u044f\u0435\u0442\u0441\u044f \u043f\u0440\u0438\u0431\u043b\u0438\u0437\u0438\u0442\u0435\u043b\u044c\u043d\u043e\u0439 \u0438 \u043d\u043e\u0441\u0438\u0442 \u043e\u0437\u043d\u0430\u043a\u043e\u043c\u0438\u0442\u0435\u043b\u044c\u043d\u044b\u0439 \u0445\u0430\u0440\u0430\u043a\u0442\u0435\u0440.",
                 contact_label: "\u0422\u043e\u043b\u044c\u043a\u043e \u0447\u0430\u0441\u0442\u043d\u043e\u0435 \u0438 \u043e\u0437\u043d\u0430\u043a\u043e\u043c\u0438\u0442\u0435\u043b\u044c\u043d\u043e\u0435 \u0438\u0441\u043f\u043e\u043b\u044c\u0437\u043e\u0432\u0430\u043d\u0438\u0435. \u041a\u043e\u043d\u0442\u0430\u043a\u0442\u043d\u0430\u044f \u0438\u043d\u0444\u043e\u0440\u043c\u0430\u0446\u0438\u044f \u043d\u0435 \u043f\u0443\u0431\u043b\u0438\u043a\u0443\u0435\u0442\u0441\u044f.",
                 legal_text: "\u042d\u0442\u0430 \u0441\u0442\u0440\u0430\u043d\u0438\u0446\u0430 \u044f\u0432\u043b\u044f\u0435\u0442\u0441\u044f \u0447\u0430\u0441\u0442\u043d\u043e\u0439 \u0437\u0430\u043c\u0435\u0442\u043a\u043e\u0439 \u0438 \u043d\u0435 \u043f\u0440\u0435\u0434\u0441\u0442\u0430\u0432\u043b\u044f\u0435\u0442 \u043d\u0438\u043a\u0430\u043a\u043e\u0439 \u0434\u0435\u044f\u0442\u0435\u043b\u044c\u043d\u043e\u0441\u0442\u0438, \u0443\u0441\u043b\u0443\u0433\u0438 \u0438\u043b\u0438 \u043e\u0440\u0433\u0430\u043d\u0438\u0437\u0430\u0446\u0438\u0438. \u041d\u0438\u043a\u0430\u043a\u043e\u0439 \u0444\u043e\u0440\u043c\u044b \u043f\u0440\u0435\u0434\u043b\u043e\u0436\u0435\u043d\u0438\u044f \u0448\u0438\u0440\u043e\u043a\u043e\u0439 \u043f\u0443\u0431\u043b\u0438\u043a\u0435 \u043d\u0435 \u043d\u0430\u043f\u0440\u0430\u0432\u043b\u044f\u0435\u0442\u0441\u044f. \u041d\u0438\u043a\u0430\u043a\u043e\u0439 \u043e\u0440\u0433\u0430\u043d\u0438\u0437\u043e\u0432\u0430\u043d\u043d\u043e\u0439 \u0434\u0435\u044f\u0442\u0435\u043b\u044c\u043d\u043e\u0441\u0442\u0438 \u043d\u0435 \u043e\u0441\u0443\u0449\u0435\u0441\u0442\u0432\u043b\u044f\u0435\u0442\u0441\u044f. \u0422\u0440\u0430\u043d\u0441\u043f\u043e\u0440\u0442\u043d\u044b\u0435 \u0443\u0441\u043b\u0443\u0433\u0438 \u043d\u0435 \u043f\u0440\u0435\u0434\u043e\u0441\u0442\u0430\u0432\u043b\u044f\u044e\u0442\u0441\u044f. \u041b\u044e\u0431\u043e\u0435 \u0432\u043e\u0437\u043c\u043e\u0436\u043d\u043e\u0435 \u043f\u0440\u0435\u0431\u044b\u0432\u0430\u043d\u0438\u0435 \u043d\u0430 \u0432\u043e\u0434\u0435 \u043f\u0440\u043e\u0438\u0441\u0445\u043e\u0434\u0438\u0442 \u0438\u0441\u043a\u043b\u044e\u0447\u0438\u0442\u0435\u043b\u044c\u043d\u043e \u0432 \u0447\u0430\u0441\u0442\u043d\u043e\u043c \u043f\u043e\u0440\u044f\u0434\u043a\u0435 \u043c\u0435\u0436\u0434\u0443 \u043e\u0442\u0434\u0435\u043b\u044c\u043d\u044b\u043c\u0438 \u043b\u0438\u0446\u0430\u043c\u0438 \u0431\u0435\u0437 \u043a\u0430\u043a\u043e\u0433\u043e-\u043b\u0438\u0431\u043e \u043e\u0440\u0433\u0430\u043d\u0438\u0437\u0430\u0442\u043e\u0440\u0430 \u0438\u043b\u0438 \u043e\u0442\u0432\u0435\u0442\u0441\u0442\u0432\u0435\u043d\u043d\u043e\u0439 \u0441\u0442\u043e\u0440\u043e\u043d\u044b. \u0427\u0435\u0440\u0435\u0437 \u0434\u0430\u043d\u043d\u044b\u0439 \u0441\u0430\u0439\u0442 \u043d\u0435 \u043e\u0441\u0443\u0449\u0435\u0441\u0442\u0432\u043b\u044f\u0435\u0442\u0441\u044f \u043f\u0440\u0438\u0432\u043b\u0435\u0447\u0435\u043d\u0438\u0435 \u0438\u043b\u0438 \u0440\u0435\u043a\u043b\u0430\u043c\u0430. \u041d\u0438\u043a\u0430\u043a\u0438\u0435 \u043a\u043e\u043c\u043f\u0435\u043d\u0441\u0430\u0446\u0438\u0438 \u0438\u043b\u0438 \u0444\u0438\u043d\u0430\u043d\u0441\u043e\u0432\u044b\u0435 \u0434\u043e\u0433\u043e\u0432\u043e\u0440\u0451\u043d\u043d\u043e\u0441\u0442\u0438 \u043d\u0435 \u0440\u0435\u0433\u0443\u043b\u0438\u0440\u0443\u044e\u0442\u0441\u044f \u0447\u0435\u0440\u0435\u0437 \u044d\u0442\u043e\u0442 \u0441\u0430\u0439\u0442.",
                 footer_note: "\u042d\u0442\u043e\u0442 \u0432\u0435\u0431-\u0441\u0430\u0439\u0442 \u043d\u0435 \u044f\u0432\u043b\u044f\u0435\u0442\u0441\u044f \u043f\u0440\u0435\u0434\u043b\u043e\u0436\u0435\u043d\u0438\u0435\u043c, \u0443\u0441\u043b\u0443\u0433\u043e\u0439 \u0438\u043b\u0438 \u043e\u0440\u0433\u0430\u043d\u0438\u0437\u043e\u0432\u0430\u043d\u043d\u043e\u0439 \u0434\u0435\u044f\u0442\u0435\u043b\u044c\u043d\u043e\u0441\u0442\u044c\u044e. \u0422\u043e\u043b\u044c\u043a\u043e \u0447\u0430\u0441\u0442\u043d\u043e\u0435 \u0438 \u043e\u0437\u043d\u0430\u043a\u043e\u043c\u0438\u0442\u0435\u043b\u044c\u043d\u043e\u0435 \u0438\u0441\u043f\u043e\u043b\u044c\u0437\u043e\u0432\u0430\u043d\u0438\u0435.",
                 insta_title: "Мы в Instagram",
-                insta_text: "Делимся фотографиями и новостями из наших частных парусных выходов. Ищите нас по адресу @privatsegling.",
-                insta_button: "Открыть Instagram"
+                insta_text: "Тут мы делимся фотографиями и моментами из наших поездок по воде. Подписывайтесь, чтобы увидеть, как это выглядит, когда ветер на нашей стороне.",
+                insta_button: "Открыть Instagram",
+                legal_summary: "Юридическая информация (нажмите, чтобы развернуть)"
             }
         };
 
