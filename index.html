@@ -200,6 +200,29 @@
         #backToTop.visible { opacity: 1; transform: translateY(0); }
         #backToTop:hover { filter: brightness(1.15); }
 
+        /* Audio Player */
+        .track-list { display: flex; flex-direction: column; gap: 12px; max-width: 650px; margin: 40px auto 0; }
+        .track-item { 
+            background: var(--surface); padding: 14px 18px; border-radius: 8px; display: flex; align-items: center; gap: 12px;
+            box-shadow: var(--shadow-sm); transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.4s ease;
+        }
+        .track-item:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); }
+        .track-icon { font-size: 1.4rem; color: var(--accent); min-width: 28px; text-align: center; transition: color 0.3s ease; }
+        .track-info { flex: 1; min-width: 0; }
+        .track-name { display: block; font-weight: 500; font-size: 0.95rem; margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .track-item audio { 
+            width: 100%; height: 32px; border-radius: 16px; outline: none; filter: grayscale(0.2); transition: filter 0.3s ease;
+        }
+        .track-item audio::-webkit-media-controls-panel { background: var(--surface); }
+
+        /* Scroll progress bar */
+        .progress-bar { position: fixed; top: 0; left: 0; height: 3px; background: var(--accent); z-index: 999; width: 0%; transition: width 0.1s linear; }
+        [data-theme="dark"] .progress-bar { background: var(--gold); }
+
+        /* Active nav link */
+        .nav-links a.active { color: var(--accent); position: relative; }
+        .nav-links a.active::after { content: ''; position: absolute; bottom: -4px; left: 0; right: 0; height: 1px; background: var(--gold); }
+
         /* Animations */
         .fade-in { opacity: 0; transform: translateY(24px); transition: opacity 0.8s ease-out, transform 0.8s ease-out; }
         .fade-in.visible { opacity: 1; transform: translateY(0); }
@@ -215,6 +238,7 @@
     </style>
 </head>
 <body>
+    <div id="progressBar" class="progress-bar"></div>
     <nav>
         <div class="container">
             <div class="logo"><a href="#" data-i18n="logo">&#9993; Privat segling</a></div>
@@ -222,6 +246,7 @@
                 <a href="#hem" data-i18n="nav_home">Hem</a>
                 <a href="#om" data-i18n="nav_about">Bakgrund</a>
                 <a href="#bilder" data-i18n="nav_photos">Bilder</a>
+                <a href="#muusik" data-i18n="nav_music">Muusik</a>
                 <a href="#karta" data-i18n="nav_map">Karta</a>
             </div>
             <div class="lang-switch">
@@ -267,6 +292,14 @@
         </div>
     </section>
 
+    <section id="muusik">
+        <div class="container fade-in">
+            <h2 class="section-title" data-i18n="music_title">Muusik & ljud</h2>
+            <div class="track-list" id="trackList"></div>
+            <p style="text-align:center; font-size:0.85rem; margin-top:24px; color: var(--text-muted);" data-i18n="music_disclaimer"></p>
+        </div>
+    </section>
+
     <section id="karta" style="background: var(--alt-bg);">
         <div class="container fade-in">
             <h2 class="section-title" data-i18n="map_title">&#128506; Ungef&#228;rlig plats</h2>
@@ -290,6 +323,12 @@
         <div class="container">
             <div style="font-family: var(--font-heading); font-size: 1.5rem; margin-bottom: 12px;">&#9993; Privat segling</div>
             <p id="contactParagraph" data-i18n="contact_label"></p>
+            <p style="margin: 16px 0;">
+                <a href="https://www.instagram.com/privatsegling/" target="_blank" rel="noopener noreferrer" style="display: inline-flex; align-items: center; gap: 8px; text-decoration: none; color: var(--gold); transition: opacity 0.3s;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><circle cx="12" cy="12" r="5" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="18" cy="6" r="1.2" fill="currentColor"/></svg>
+                    @privatsegling
+                </a>
+            </p>
             <p class="footer-note" data-i18n="footer_note"></p>
         </div>
     </footer>
@@ -307,7 +346,7 @@
         const translations = {
             sv: {
                 logo: "\u26f5 Privat segling",
-                nav_home: "Hem", nav_about: "Bakgrund", nav_photos: "Bilder", nav_map: "Karta",
+                nav_home: "Hem", nav_about: "Bakgrund", nav_photos: "Bilder", nav_music: "Muusik", nav_map: "Karta",
                 hero_title: "Privat seglingsanteckning",
                 hero_text: "Privat information utan koppling till n\u00e5gon verksamhet eller erbjudande.",
                 about_title: "Bakgrund",
@@ -316,6 +355,8 @@
                 context_text: "Alla kontakter sker p\u00e5 individuell basis. Det finns ingen organisation, inget utbud och inga \u00e5terkommande tillf\u00e4llen. Informationen p\u00e5 denna sida \u00e4r endast avsedd f\u00f6r personlig orientering och utg\u00f6r inte ett erbjudande till allm\u00e4nheten. Publicerade bilder saknar tidsm\u00e4ssig koppling och speglar enbart enskilda privata tillf\u00e4llen.",
                 gallery_title: "Bilder (privata tillf\u00e4llen)",
                 gallery_disclaimer: "Bilder utan tidsm\u00e4ssig ordning och utan koppling till \u00e5terkommande tillf\u00e4llen.",
+                music_title: "Muusik & ljud",
+                music_disclaimer: "Privata inspelningar och favoritl\u00e5tar. Endast f\u00f6r personlig lyssning.",
                 map_title: "\ud83d\udccd Ungef\u00e4rlig plats", map_location: "Stockholmsomr\u00e5det",
                 map_disclaimer: "Platsuppgift endast ungef\u00e4rlig och av informativ karakt\u00e4r.",
                 contact_label: "Endast privat och informativ anv\u00e4ndning. Ingen kontaktinformation publiceras.",
@@ -324,7 +365,7 @@
             },
             en: {
                 logo: "\u26f5 Private sailing",
-                nav_home: "Home", nav_about: "Background", nav_photos: "Photos", nav_map: "Map",
+                nav_home: "Home", nav_about: "Background", nav_photos: "Photos", nav_music: "Music", nav_map: "Map",
                 hero_title: "Private sailing notes",
                 hero_text: "Private information with no connection to any activity or offer.",
                 about_title: "Background",
@@ -333,6 +374,8 @@
                 context_text: "All contacts are made on an individual basis. There is no organisation, no offering, and no recurring occasions. The information on this site is for personal reference only and does not constitute an offer to the general public. Published images have no chronological connection and reflect only individual private occasions.",
                 gallery_title: "Images (private occasions)",
                 gallery_disclaimer: "Images in no chronological order and without connection to recurring occasions.",
+                music_title: "Music & sounds",
+                music_disclaimer: "Private recordings and favorite tracks. For personal listening only.",
                 map_title: "\ud83d\udccd Approximate location", map_location: "Stockholm area",
                 map_disclaimer: "Location information is approximate and for informative purposes only.",
                 contact_label: "Private and informative use only. No contact information published.",
@@ -341,7 +384,7 @@
             },
             ru: {
                 logo: "\u26f5 \u0427\u0430\u0441\u0442\u043d\u043e\u0435 \u043f\u043b\u0430\u0432\u0430\u043d\u0438\u0435",
-                nav_home: "\u0413\u043b\u0430\u0432\u043d\u0430\u044f", nav_about: "\u041f\u0440\u0435\u0434\u0438\u0441\u0442\u043e\u0440\u0438\u044f", nav_photos: "\u0424\u043e\u0442\u043e", nav_map: "\u041a\u0430\u0440\u0442\u0430",
+                nav_home: "\u0413\u043b\u0430\u0432\u043d\u0430\u044f", nav_about: "\u041f\u0440\u0435\u0434\u0438\u0441\u0442\u043e\u0440\u0438\u044f", nav_photos: "\u0424\u043e\u0442\u043e", nav_music: "\u041c\u0443\u0437\u044b\u043a\u0430", nav_map: "\u041a\u0430\u0440\u0442\u0430",
                 hero_title: "\u0427\u0430\u0441\u0442\u043d\u044b\u0435 \u0437\u0430\u043f\u0438\u0441\u0438 \u043e \u043f\u0430\u0440\u0443\u0441\u043d\u043e\u043c \u0441\u043f\u043e\u0440\u0442\u0435",
                 hero_text: "\u0427\u0430\u0441\u0442\u043d\u0430\u044f \u0438\u043d\u0444\u043e\u0440\u043c\u0430\u0446\u0438\u044f, \u043d\u0435 \u0441\u0432\u044f\u0437\u0430\u043d\u043d\u0430\u044f \u0441 \u043a\u0430\u043a\u043e\u0439-\u043b\u0438\u0431\u043e \u0434\u0435\u044f\u0442\u0435\u043b\u044c\u043d\u043e\u0441\u0442\u044c\u044e \u0438\u043b\u0438 \u043f\u0440\u0435\u0434\u043b\u043e\u0436\u0435\u043d\u0438\u0435\u043c.",
                 about_title: "\u041f\u0440\u0435\u0434\u0438\u0441\u0442\u043e\u0440\u0438\u044f",
@@ -350,6 +393,8 @@
                 context_text: "\u0412\u0441\u0435 \u043a\u043e\u043d\u0442\u0430\u043a\u0442\u044b \u043e\u0441\u0443\u0449\u0435\u0441\u0442\u0432\u043b\u044f\u044e\u0442\u0441\u044f \u043d\u0430 \u0438\u043d\u0434\u0438\u0432\u0438\u0434\u0443\u0430\u043b\u044c\u043d\u043e\u0439 \u043e\u0441\u043d\u043e\u0432\u0435. \u041d\u0435\u0442 \u043e\u0440\u0433\u0430\u043d\u0438\u0437\u0430\u0446\u0438\u0438, \u043d\u0435\u0442 \u043f\u0440\u0435\u0434\u043b\u043e\u0436\u0435\u043d\u0438\u0439 \u0443\u0441\u043b\u0443\u0433 \u0438 \u043d\u0435\u0442 \u0440\u0435\u0433\u0443\u043b\u044f\u0440\u043d\u044b\u0445 \u043c\u0435\u0440\u043e\u043f\u0440\u0438\u044f\u0442\u0438\u0439. \u0418\u043d\u0444\u043e\u0440\u043c\u0430\u0446\u0438\u044f \u043d\u0430 \u044d\u0442\u043e\u043c \u0441\u0430\u0439\u0442\u0435 \u043f\u0440\u0435\u0434\u043d\u0430\u0437\u043d\u0430\u0447\u0435\u043d\u0430 \u0442\u043e\u043b\u044c\u043a\u043e \u0434\u043b\u044f \u043b\u0438\u0447\u043d\u043e\u0433\u043e \u043e\u0437\u043d\u0430\u043a\u043e\u043c\u043b\u0435\u043d\u0438\u044f \u0438 \u043d\u0435 \u044f\u0432\u043b\u044f\u0435\u0442\u0441\u044f \u043f\u0440\u0435\u0434\u043b\u043e\u0436\u0435\u043d\u0438\u0435\u043c \u0434\u043b\u044f \u0448\u0438\u0440\u043e\u043a\u043e\u0439 \u043f\u0443\u0431\u043b\u0438\u043a\u0438. \u041e\u043f\u0443\u0431\u043b\u0438\u043a\u043e\u0432\u0430\u043d\u043d\u044b\u0435 \u0438\u0437\u043e\u0431\u0440\u0430\u0436\u0435\u043d\u0438\u044f \u043d\u0435 \u0438\u043c\u0435\u044e\u0442 \u0432\u0440\u0435\u043c\u0435\u043d\u043d\u043e\u0439 \u043f\u0440\u0438\u0432\u044f\u0437\u043a\u0438 \u0438 \u043e\u0442\u0440\u0430\u0436\u0430\u044e\u0442 \u0442\u043e\u043b\u044c\u043a\u043e \u043e\u0442\u0434\u0435\u043b\u044c\u043d\u044b\u0435 \u0447\u0430\u0441\u0442\u043d\u044b\u0435 \u0441\u043b\u0443\u0447\u0430\u0438.",
                 gallery_title: "\u0424\u043e\u0442\u043e\u0433\u0440\u0430\u0444\u0438\u0438 (\u0447\u0430\u0441\u0442\u043d\u044b\u0435 \u0441\u043b\u0443\u0447\u0430\u0438)",
                 gallery_disclaimer: "\u0418\u0437\u043e\u0431\u0440\u0430\u0436\u0435\u043d\u0438\u044f \u0432 \u0441\u043b\u0443\u0447\u0430\u0439\u043d\u043e\u043c \u043f\u043e\u0440\u044f\u0434\u043a\u0435, \u0431\u0435\u0437 \u0441\u0432\u044f\u0437\u0438 \u0441 \u043f\u043e\u0432\u0442\u043e\u0440\u044f\u044e\u0449\u0438\u043c\u0438\u0441\u044f \u0432\u044b\u0445\u043e\u0434\u0430\u043c\u0438.",
+                music_title: "\u041c\u0443\u0437\u044b\u043a\u0430 \u0438 \u0437\u0432\u0443\u043a\u0438",
+                music_disclaimer: "\u0427\u0430\u0441\u0442\u043d\u044b\u0435 \u0437\u0430\u043f\u0438\u0441\u0438 \u0438 \u043b\u044e\u0431\u0438\u043c\u044b\u0435 \u043f\u0435\u0441\u043d\u0438. \u0422\u043e\u043b\u044c\u043a\u043e \u0434\u043b\u044f \u043b\u0438\u0447\u043d\u043e\u0433\u043e \u043f\u0440\u043e\u0441\u043b\u0443\u0448\u0438\u0432\u0430\u043d\u0438\u044f.",
                 map_title: "\ud83d\udccd \u041f\u0440\u0438\u043c\u0435\u0440\u043d\u043e\u0435 \u0440\u0430\u0441\u043f\u043e\u043b\u043e\u0436\u0435\u043d\u0438\u0435", map_location: "\u0420\u0430\u0439\u043e\u043d \u0421\u0442\u043e\u043a\u0433\u043e\u043b\u044c\u043c\u0430",
                 map_disclaimer: "\u0418\u043d\u0444\u043e\u0440\u043c\u0430\u0446\u0438\u044f \u043e \u043c\u0435\u0441\u0442\u0435 \u044f\u0432\u043b\u044f\u0435\u0442\u0441\u044f \u043f\u0440\u0438\u0431\u043b\u0438\u0437\u0438\u0442\u0435\u043b\u044c\u043d\u043e\u0439 \u0438 \u043d\u043e\u0441\u0438\u0442 \u043e\u0437\u043d\u0430\u043a\u043e\u043c\u0438\u0442\u0435\u043b\u044c\u043d\u044b\u0439 \u0445\u0430\u0440\u0430\u043a\u0442\u0435\u0440.",
                 contact_label: "\u0422\u043e\u043b\u044c\u043a\u043e \u0447\u0430\u0441\u0442\u043d\u043e\u0435 \u0438 \u043e\u0437\u043d\u0430\u043a\u043e\u043c\u0438\u0442\u0435\u043b\u044c\u043d\u043e\u0435 \u0438\u0441\u043f\u043e\u043b\u044c\u0437\u043e\u0432\u0430\u043d\u0438\u0435. \u041a\u043e\u043d\u0442\u0430\u043a\u0442\u043d\u0430\u044f \u0438\u043d\u0444\u043e\u0440\u043c\u0430\u0446\u0438\u044f \u043d\u0435 \u043f\u0443\u0431\u043b\u0438\u043a\u0443\u0435\u0442\u0441\u044f.",
@@ -449,6 +494,78 @@
             });
         }
 
+        // === Audio Player ===
+        const audioTracks = [
+            'calm-waves.mp3',
+            'wind-in-sails.mp3',
+            'harbor-sunset.mp3',
+            'night-sea.mp3',
+            'morning-breeze.mp3',
+            'open-water.mp3',
+        ];
+
+        function loadAudio() {
+            const trackList = document.getElementById('trackList');
+            if (!audioTracks || audioTracks.length === 0) {
+                const p = document.createElement('p');
+                p.style.textAlign = 'center'; p.style.color = '#718096';
+                p.textContent = 'Inga ljud f\u00f6r tillf\u00e4llet.';
+                trackList.appendChild(p);
+                return;
+            }
+            audioTracks.forEach(track => {
+                const item = document.createElement('div');
+                item.className = 'track-item fade-in';
+
+                const icon = document.createElement('span');
+                icon.className = 'track-icon'; icon.textContent = '\ud83c\udfb5';
+
+                const info = document.createElement('div');
+                info.className = 'track-info';
+
+                const name = document.createElement('span');
+                name.className = 'track-name';
+                name.textContent = track.replace(/\.[^/.]+$/, '').replace(/[-_]/g, ' ');
+
+                const audio = document.createElement('audio');
+                audio.src = 'audio/' + track; audio.controls = true; audio.preload = 'metadata';
+
+                // Auto-stop other tracks when this one plays
+                audio.addEventListener('play', () => {
+                    document.querySelectorAll('#trackList audio').forEach(a => {
+                        if (a !== audio && !a.paused) a.pause();
+                    });
+                });
+
+                info.appendChild(name); info.appendChild(audio);
+                item.appendChild(icon); item.appendChild(info);
+                trackList.appendChild(item);
+            });
+        }
+
+        // === Scroll Progress Bar ===
+        const progressBar = document.getElementById('progressBar');
+        window.addEventListener('scroll', () => {
+            const scrollTop = window.scrollY;
+            const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+            const progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+            progressBar.style.width = progress + '%';
+        }, { passive: true });
+
+        // === Active Nav Highlight ===
+        const sections = document.querySelectorAll('section[id]');
+        const navLinks = document.querySelectorAll('.nav-links a');
+        const navObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    navLinks.forEach(link => link.classList.remove('active'));
+                    const activeLink = document.querySelector(`.nav-links a[href="#${entry.target.id}"]`);
+                    if (activeLink) activeLink.classList.add('active');
+                }
+            });
+        }, { threshold: 0.3 });
+        sections.forEach(s => navObserver.observe(s));
+
         // === Scroll Animations ===
         function initAnimations() {
             const observer = new IntersectionObserver((entries) => {
@@ -465,6 +582,7 @@
 
         changeLanguage('sv');
         loadGallery();
+        loadAudio();
         initAnimations();
     </script>
 </body>
