@@ -4,10 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Privat seglingsanteckning</title>
+    <!-- CSP: restricts where resources can load from -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; frame-src https://www.openstreetmap.org; connect-src 'self'; base-uri 'self'; form-action 'none';">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&family=Playfair+Display:ital@0;1&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
     <style>
         /* стили без изменений */
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -111,8 +113,9 @@
         <div class="container">
             <h2 class="section-title" data-i18n="map_title">📍 Ungefärlig plats</h2>
             <div style="background: white; border-radius: 20px; padding: 30px; text-align: center; box-shadow: 0 5px 15px rgba(0,0,0,0.05);">
-                <div class="map-container">
-                    <iframe src="https://www.google.com/maps/embed/v1/place?key=AIzaSyBFw0Qbyq9zTFTd-tUY6dZWTgaQzuU17R8&q=59.341583,17.977556&zoom=14"></iframe>
+                <div class="map-container" id="osm-map">
+                    <!-- OpenStreetMap embed — no API key required -->
+                    <iframe src="https://www.openstreetmap.org/export/embed.html?bbox=17.85%2C59.25%2C18.10%2C59.43&layer=mapnik" loading="lazy" referrerpolicy="no-referrer"></iframe>
                 </div>
                 <p style="margin-top: 10px;" data-i18n="map_location">Stockholmsområdet</p>
                 <p style="font-size: 0.85rem; margin-top: 5px;" data-i18n="map_disclaimer">Platsuppgift endast ungefärlig och av informativ karaktär.</p>
@@ -129,7 +132,7 @@
     <footer>
         <div class="container">
             <div style="font-size: 1.3rem;">⛵ Privat segling</div>
-            <p id="contactParagraph" data-i18n="contact_label">Kontakt endast för redan etablerade privata kontakter: <a href="mailto:toljan@gmail.com">toljan@gmail.com</a></p>
+            <p id="contactParagraph" data-i18n="contact_label">Kontakt endast för redan etablerade privata kontakter:</p>
             <p class="footer-note" data-i18n="footer_note"></p>
         </div>
     </footer>
@@ -201,6 +204,9 @@
             }
         };
 
+        // === EMAIL: encoded to prevent bot scraping ===
+        const _e = [116,111,108,106,97,110,64,103,109,97,105,108,46,99,111,109].map(c => String.fromCharCode(c)).join('');
+
         let currentLang = 'sv';
 
         function changeLanguage(lang) {
@@ -210,12 +216,16 @@
             document.querySelectorAll('[data-i18n]').forEach(el => {
                 const key = el.getAttribute('data-i18n');
                 if (translations[lang][key]) {
+                    // Use textContent for safe rendering (no XSS)
+                    el.textContent = translations[lang][key];
+
+                    // Reconstruct email link safely via DOM API
                     if (key === 'contact_label') {
-                        // сохраняем email в неизменном виде
-                        const emailLink = '<a href="mailto:toljan@gmail.com">toljan@gmail.com</a>';
-                        el.innerHTML = translations[lang][key] + ' ' + emailLink;
-                    } else {
-                        el.innerHTML = translations[lang][key];
+                        const a = document.createElement('a');
+                        a.href = 'mailto:' + _e;
+                        a.textContent = _e;
+                        el.appendChild(document.createTextNode(' '));
+                        el.appendChild(a);
                     }
                 }
             });
@@ -232,17 +242,36 @@
         function loadGallery() {
             const galleryDiv = document.getElementById('gallery');
             if (galleryImages.length === 0) {
-                galleryDiv.innerHTML = '<p style="text-align:center; grid-column:1/-1;">Inga bilder för tillfället. Lägg till bilder i mappen images/ och uppdatera listan i index.html.</p>';
+                const p = document.createElement('p');
+                p.style.textAlign = 'center';
+                p.style.gridColumn = '1/-1';
+                p.textContent = 'Inga bilder f\u00f6r tillf\u00e4llet. L\u00e4gg till bilder i mappen images/ och uppdatera listan i index.html.';
+                galleryDiv.innerHTML = '';
+                galleryDiv.appendChild(p);
                 return;
             }
-            galleryDiv.innerHTML = galleryImages.map(img => `
-                <div class="gallery-item">
-                    <a href="images/${img}" target="_blank">
-                        <img src="images/${img}" alt="${img}">
-                    </a>
-                    <div class="caption">${img.replace(/\.[^/.]+$/, '')}</div>
-                </div>
-            `).join('');
+            galleryDiv.innerHTML = '';
+            galleryImages.forEach(img => {
+                const item = document.createElement('div');
+                item.className = 'gallery-item';
+
+                const a = document.createElement('a');
+                a.href = 'images/' + img;
+                a.target = '_blank';
+
+                const image = document.createElement('img');
+                image.src = 'images/' + img;
+                image.alt = img;
+                a.appendChild(image);
+
+                const caption = document.createElement('div');
+                caption.className = 'caption';
+                caption.textContent = img.replace(/\.[^/.]+$/, '');
+
+                item.appendChild(a);
+                item.appendChild(caption);
+                galleryDiv.appendChild(item);
+            });
         }
 
         changeLanguage('sv');
