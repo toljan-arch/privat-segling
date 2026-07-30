@@ -132,7 +132,7 @@
     <footer>
         <div class="container">
             <div style="font-size: 1.3rem;">⛵ Privat segling</div>
-            <p id="contactParagraph" data-i18n="contact_label">Kontakt endast för redan etablerade privata kontakter:</p>
+            <p id="contactParagraph" data-i18n="contact_label"></p>
             <p class="footer-note" data-i18n="footer_note"></p>
         </div>
     </footer>
@@ -156,7 +156,7 @@
                 map_title: "📍 Ungefärlig plats",
                 map_location: "Stockholmsområdet",
                 map_disclaimer: "Platsuppgift endast ungefärlig och av informativ karaktär.",
-                contact_label: "Kontakt endast för redan etablerade privata kontakter:",
+                contact_label: "Endast privat och informativ användning. Ingen kontaktinformation publiceras.",
                 legal_text: "Denna sida är en privat anteckning och representerar inte någon verksamhet, tjänst eller organisation. Ingen form av erbjudande riktas till allmänheten. Ingen organiserad aktivitet förekommer. Inga transporttjänster tillhandahålls. All eventuell närvaro på vatten sker uteslutande i privat sammanhang mellan enskilda personer utan någon form av arrangör eller ansvarig part. Ingen marknadsföring eller rekrytering sker via denna sida. Ingen ersättning eller ekonomisk överenskommelse regleras via denna sida.",
                 footer_note: "Denna webbplats utgör inte ett erbjudande, en tjänst eller en organiserad aktivitet. Endast privat och informativ användning."
             },
@@ -177,7 +177,7 @@
                 map_title: "📍 Approximate location",
                 map_location: "Stockholm area",
                 map_disclaimer: "Location information is approximate and for informative purposes only.",
-                contact_label: "Contact only for already established private connections:",
+                contact_label: "Private and informative use only. No contact information published.",
                 legal_text: "This page is a private note and does not represent any activity, service, or organisation. No form of offer is directed to the public. No organised activity takes place. No transport services are provided. Any possible presence on the water occurs strictly in a private context between individuals, without any organiser or responsible party. No marketing or recruitment takes place via this site. No compensation or financial arrangement is regulated through this site.",
                 footer_note: "This website does not constitute an offer, a service, or an organised activity. Private and informative use only."
             },
@@ -198,14 +198,11 @@
                 map_title: "📍 Примерное расположение",
                 map_location: "Район Стокгольма",
                 map_disclaimer: "Информация о месте является приблизительной и носит ознакомительный характер.",
-                contact_label: "Контакт только для уже существующих личных связей:",
+                contact_label: "Только частное и ознакомительное использование. Контактная информация не публикуется.",
                 legal_text: "Эта страница является частной заметкой и не представляет никакой деятельности, услуги или организации. Никакой формы предложения широкой публике не направляется. Никакой организованной деятельности не осуществляется. Транспортные услуги не предоставляются. Любое возможное пребывание на воде происходит исключительно в частном порядке между отдельными лицами без какого-либо организатора или ответственной стороны. Через данный сайт не осуществляется привлечение или реклама. Никакие компенсации или финансовые договорённости не регулируются через этот сайт.",
                 footer_note: "Этот веб-сайт не является предложением, услугой или организованной деятельностью. Только частное и ознакомительное использование."
             }
         };
-
-        // === EMAIL: encoded to prevent bot scraping ===
-        const _e = [116,111,108,106,97,110,64,103,109,97,105,108,46,99,111,109].map(c => String.fromCharCode(c)).join('');
 
         let currentLang = 'sv';
 
@@ -218,15 +215,6 @@
                 if (translations[lang][key]) {
                     // Use textContent for safe rendering (no XSS)
                     el.textContent = translations[lang][key];
-
-                    // Reconstruct email link safely via DOM API
-                    if (key === 'contact_label') {
-                        const a = document.createElement('a');
-                        a.href = 'mailto:' + _e;
-                        a.textContent = _e;
-                        el.appendChild(document.createTextNode(' '));
-                        el.appendChild(a);
-                    }
                 }
             });
         }
