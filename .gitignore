@@ -1,0 +1,6 @@
+# Python / Flask (не нужен для статического сайта)
+__pycache__/
+*.pyc
+.env
+app.py
+venv/
